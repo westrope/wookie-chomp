@@ -1,0 +1,68 @@
+%x comment
+%x include
+%x string
+
+$$
+
+"/*"                    { BEGIN(comment); }
+<comment>[^*\n]*        { /* will eat up anything not a star or newline */ }
+<comment>"*"+[^*/\n]*   { /* eat up all stars not followed by '/' or newline */ }
+<comment>\n             { linenum++; }
+<comment>"*"+"/"        { BEGIN(INITIAL); }
+
+"#include"              { BEGIN(include); }
+<include>[ \t]*         { // clean up whitespace }
+<include>(\")/.
+<include>([^ "]*)       { // match the file name with quotes
+                          // open file and parse}
+<include>\"             {BEGIN(INITIAL); }
+
+
+\"                      { BEGIN(string); }
+<string>\\.             { // c-code to deal with escapes goes here }
+<string>([^\\"])* 
+\"                      { BEGIN(INITIAL); }
+
+"if"        { return IF; }
+"return"    { return RETURN; }
+"while"     { return WHILE; }
+"do"        { return DO; }
+"case"      { return CASE; }
+"break"     { return BREAK; }
+"switch"    { return SWITCH; }
+"for"       { return FOR; }
+"class"     { return CLASS; }
+"private"   { return PRIVATE; }
+"public"    { return PUBLIC; }
+";"         { return SEMI; }
+
+"("         { return O_PAREN; }
+")"         { return C_PAREN; }
+"{"         { return O_CURLY; }
+"}"         { return C_CURLY; }
+"["         { return O_SQRE; }
+"]"         { return C_SQRE; }
+
+"::"        { return DBLCOLON; }
+":"         { return :; }
+"."         { return .; }
+"->"        { return ->; }
+"++"        { return ++; }
+"+="        { return +=; }
+"=="        { return ==; }
+"-="        { return -=; }
+"--"        { return --; }
+"!="        { return !=; }
+"<="        { return <=; }
+">="        { return >=; }
+"<"         { return <; }
+">"         { return >; }
+"%"         { return %; }
+"/"         { return /; }
+"*"         { return *; }
+"!"         { return !; }
+"||"        { return ||; }
+"&&"        { return &&; }
+"="         { return ASSIGN; }
+"+"         { return ADD; }
+"-"         { return MINUS; }
