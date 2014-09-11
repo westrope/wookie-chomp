@@ -1,10 +1,10 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#incldue <stdlib.h>
+#include <stdlib.h>
 #include <ctype.h>
 
-#include "120++.tab.h"
+#include "y.tab.h"
 #include "token.h"
 %}
 
@@ -12,41 +12,9 @@
 %x include
 %x string
 
-$$
-
-"/*"                    { BEGIN(comment); }
-<comment>[^*\n]*        { /* will eat up anything not a star or newline */ }
-<comment>"*"+[^*/\n]*   { /* eat up all stars not followed by '/' or newline */ }
-<comment>\n             { linenum++; }
-<comment>"*"+"/"        { BEGIN(INITIAL); }
-
-
-
-
-
-"#include"              { BEGIN(include); }
-<include>[ \t]*         { // clean up whitespace }
-"<iostream>"
-"<cstlib>"
-"<ctime>"
-"<string>"
-"<fstream>"
-<include>(\")/.
-<include>([^ "]*)       { // match the file name with quotes
-                          // open file and parse}
-<include>\"             {BEGIN(INITIAL); }
-
-
-\"                      { BEGIN(string); }
-<string>"\n"            { // c-code to deal with escapes goes here }
-<string>"\t"
-<string>"\'"
-<string>"\\"
-<string>"\0"
-<string>[\\]["]
-<string>\\.             /* catch all bad escapes and error */
-<string>([^\\"])* 
-\"                      { BEGIN(INITIAL); }
+%%
+[ \t]*
+[ \n]*
 
 "if"        { return IF; }
 "return"    { return RETURN; }
@@ -76,34 +44,35 @@ $$
 "char"      { return CHAR; }
 "boole"     { return BOOLE; }
 
-
-"("         { return O_PAREN; }
-")"         { return C_PAREN; }
-"{"         { return O_CURLY; }
-"}"         { return C_CURLY; }
-"["         { return O_SQRE; }
-"]"         { return C_SQRE; }
+"("         { return LP; }
+")"         { return RP; }
+"{"         { return LC; }
+"}"         { return RC; }
+"["         { return LB; }
+"]"         { return RB; }
 
 "::"        { return DBLCOLON; }
-":"         { return :; }
-"."         { return .; }
-"->"        { return ->; }
-"++"        { return ++; }
-"+="        { return +=; }
-"=="        { return ==; }
-"-="        { return -=; }
-"--"        { return --; }
-"!="        { return !=; }
-"<="        { return <=; }
-">="        { return >=; }
-"<"         { return <; }
-">"         { return >; }
-"%"         { return %; }
-"/"         { return /; }
-"*"         { return *; }
-"!"         { return !; }
-"||"        { return ||; }
-"&&"        { return &&; }
+":"         { return COLON; }
+"."         { return DOT; }
+"->"        { return ARROW; }
+"++"        { return PLUSPLUS; }
+"+="        { return PLUSASSIGN; }
+"=="        { return EQUAL; }
+"-="        { return MINUSEQUALS; }
+"--"        { return MINUSMINUS; }
+"!="        { return NEQ; }
+"<="        { return LTE; }
+">="        { return GTE; }
+"<"         { return LT; }
+">"         { return GT; }
+"%"         { return MOD; }
+"/"         { return DIV; }
+"*"         { return MUL; }
+"!"         { return BANG; }
+"||"        { return OR; }
+"&&"        { return AND; }
 "="         { return ASSIGN; }
-"+"         { return ADD; }
+"+"         { return PLUS; }
 "-"         { return MINUS; }
+
+.           { /* Eat up all bad tokens */ }
