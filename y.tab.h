@@ -107,4 +107,6 @@
 #define NEQ 363
 #define LTE 364
 #define GTE 365
-
+#define USING 366
+#define NAMESPC 367
+#define STD 368

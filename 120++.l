@@ -8,6 +8,8 @@
 #include "token.h"
 %}
 
+%option yylineno
+
 %x comment
 %x include
 %x string
@@ -15,6 +17,24 @@
 %%
 [ \t]*
 [ \n]*
+
+
+"/*"        { BEGIN (comment); }
+<comment>[^*\n]*
+<comment>"*"+[^*/\n]*
+<comment>\n
+<comment>"*"+"/"        { BEGIN (INITIAL); }
+
+
+
+"#include"    { BEGIN (include); }
+<include>[ /t]
+<include>"<iostream>"  { printf("found iostream\n"); 
+                         BEGIN (INITIAL); }
+
+<include>\"   { BEGIN (INITIAL); }
+
+
 
 "if"        { return IF; }
 "return"    { return RETURN; }
@@ -43,6 +63,19 @@
 "float"     { return FLOAT; }
 "char"      { return CHAR; }
 "boole"     { return BOOLE; }
+"using"     { return USING; }
+"namespace"   {return NAMESPC; }
+"std"       {return STD; }
+
+\"          { BEGIN (string); }
+<string>[^\\\"\n]* 
+<string>"\n"
+<string>\\t
+<string>\\'
+<string>"\\"
+<string>\\0
+<string>\\["]
+<string>\"         { BEGIN (INITIAL); }
 
 "("         { return LP; }
 ")"         { return RP; }
