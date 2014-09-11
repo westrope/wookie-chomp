@@ -14,4 +14,4 @@ lex.yy.c: 120++.l
 	flex 120++.l
 
 clean:
-	rm lex.yy.o main.o 120++
+	rm lex.yy.o main.o 120++ lex.yy.c
