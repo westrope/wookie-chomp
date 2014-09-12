@@ -26,6 +26,9 @@
 <comment>"*"+"/"        { BEGIN (INITIAL); }
 
 
+"//"[^\n]*\n
+
+
 
 "#include"    { BEGIN (include); }
 <include>[ /t]
@@ -66,6 +69,15 @@
 "using"     { return USING; }
 "namespace"   {return NAMESPC; }
 "std"       {return STD; }
+"."         { return DOT; }
+
+[a-zA-Z_]([a-zA-Z_]|[0-9])*   { return LIT; }
+
+[0-9]*    {return INTLIT; }
+
+[0-9]*"."[0-9]?   {return FLLIT; }
+[0-9]+"."[0-9]*   {return FLLIT; }
+
 
 \"          { BEGIN (string); }
 <string>[^\\\"\n]* 
@@ -75,7 +87,7 @@
 <string>"\\"
 <string>\\0
 <string>\\["]
-<string>\"         { BEGIN (INITIAL); }
+<string>\"         {printf("found string");  BEGIN (INITIAL); }
 
 "("         { return LP; }
 ")"         { return RP; }
@@ -86,7 +98,7 @@
 
 "::"        { return DBLCOLON; }
 ":"         { return COLON; }
-"."         { return DOT; }
+
 "->"        { return ARROW; }
 "++"        { return PLUSPLUS; }
 "+="        { return PLUSASSIGN; }

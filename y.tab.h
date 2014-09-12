@@ -95,8 +95,6 @@
 #define IFSTREAM 351
 #define FSTREAM 352
 #define BOOLE 353
-
-
 #define DBLCOLON 356
 #define ARROW 357
 #define PLUSPLUS 358
@@ -110,3 +108,6 @@
 #define USING 366
 #define NAMESPC 367
 #define STD 368
+#define INTLIT 369
+#define LIT 370
+#define FLLIT 371
