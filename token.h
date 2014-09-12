@@ -1,3 +1,6 @@
+int g_argc;
+char **g_argv;
+
 struct token {
   int code;   /* the integer code returned by yylex */
   char *text;     /* the actual string (lexeme) matched */

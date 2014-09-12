@@ -6,6 +6,8 @@
 
 #include "y.tab.h"
 #include "token.h"
+
+int I = 1;
 %}
 
 %option yylineno
@@ -149,4 +151,15 @@
 
 .           { printf("found bad token\n"); }
 
+
+%%
+
+int yywrap(){
+     I++;
+     if( I < g_argc ){
+       yyin = fopen( g_argv[I], "r");
+       return 0;
+     }
+     return 1;
+}
 
