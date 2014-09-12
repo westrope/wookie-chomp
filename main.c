@@ -39,8 +39,11 @@ int main( int argc, char *argv[] )
     p = start;
     while( (t = yylex()) > 0)
     {
-      // create new token
-      // tok = create new token()
+      tok = CreateToken(t, yytext, t_filename, yylineno); 
+      if( t = SLIT){
+	SetSval(tok, t_sval);
+	free(t_sval);
+      }
       Add( p, tok);
       printf( "token '%d' text '%s'\n", t, yytext);
     }

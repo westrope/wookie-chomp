@@ -112,3 +112,4 @@
 #define LIT 370
 #define FLLIT 371
 #define COMMA 372
+#define SLIT 373

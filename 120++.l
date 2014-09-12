@@ -102,13 +102,23 @@ int I = 1;
 
 
 \"          { BEGIN (string); }
-<string>[^\\\"\n]* 
-<string>"\n"
-<string>\\t
-<string>\\'
-<string>"\\"
-<string>\\0
-<string>\\["]
+<string>(\\.|[^\\\"\n])*     { char * t_sval;
+                               t_sval = calloc(strlen(yytext)+1, sizeof(char))
+                               int i; int j;
+                               i = 0; j = 0;
+                               while( yytext[i] != '\0' ){
+                                 while( yytext[i] != '\"' ){
+                                    t_sval[j++] = yytext[i++];
+                                 }
+                                 if( yytext[i] == '\\' && yytext[i+1] == 'n' ) { t_sval[j++] = '\n'; i++; i++; }
+                                 if( yytext[i] == '\\' && yytext[i+1] == 't' ) {t_sval[j++] = '\t'; i++; i++; }
+                                 if( yytext[i] == '\\' && yytext[i+1] == '\'' ) {t_sval[j++] = '\''; i++; i++; }
+                                 if( yytext[i] == '\\' && yytext[i+1] == '\\' ) {t_sval[j++] = '\\'; i++; i++; }
+                                 if( yytext[i] == '\\' && yytext[i+1] == '\"' ) { t_sval[j++] = '\"'; i++; i++; }
+                                 if( yytext[i] == '\\' && yytext[i+1] == '0' ) { t_sval[j++] = '\0'; i++; i++; }
+                               }
+                               t_sval = realloc(t_sval, strlen(sval)+1);
+                               return SLIT;
 <string>\"         {printf("found string\n");  BEGIN (INITIAL); }
 
 "("         { return LP; }

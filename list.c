@@ -35,7 +35,7 @@ void Print(){
   nodeptr p = finish;
 
   while( p != NULL){
-    // call token print function
+    PrintToken(p->token);
     p = p->next;
   }
 }
