@@ -31,7 +31,7 @@
 
 
 "#include"    { BEGIN (include); }
-<include>[ /t]
+<include>[ /t]*
 <include>"<iostream>"  { printf("found iostream\n"); 
                          BEGIN (INITIAL); }
 <include>"<cstdlib>"   { printf("found cstdlib\n");
@@ -42,8 +42,21 @@
                          BEGIN (INITIAL); }
 <include>"<fstream>"   { printf("found fstream\n");
                          BEGIN (INITIAL); }
-<include>\"([^ \n\t])\"    { printf("found user include\n");
-                             BEGIN(INITIAL); }
+<include>\"([^ \n\t])+\"    { printf("found user include\n");
+                              
+                              int len = strlen(yytext) - 2;
+                              char *filename = calloc(len, sizeof(char));
+                              strncpy(filename, yytext+1, len);
+                              filename[len] = '\0';
+                              printf("%s\n", filename);
+
+                              yyin = fopen( filename, "r");
+                              if( !yyin ){
+                                printf("couldn't open include file\n");
+                              }
+                              yypush_buffer_state(yy_create_buffer( yyin, YY_BUF_SIZE ));
+                              free(filename);
+                              BEGIN(INITIAL); }
 
 
 "if"        { return IF; }
@@ -126,5 +139,14 @@
 "="         { return ASSIGN; }
 "+"         { return PLUS; }
 "-"         { return MINUS; }
+","         { return COMMA; }
+
+<<EOF>>     { yypop_buffer_state();
+              if( !YY_CURRENT_BUFFER ){
+                 yyterminate();
+              }
+            }
 
 .           { printf("found bad token\n"); }
+
+

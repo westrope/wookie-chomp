@@ -111,3 +111,4 @@
 #define INTLIT 369
 #define LIT 370
 #define FLLIT 371
+#define COMMA 372
