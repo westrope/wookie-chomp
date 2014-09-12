@@ -7,8 +7,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "y.tab.h"
 #include "token.h"
+#include "list.h"
 
 extern FILE *yyin;
 extern char *yytext;
@@ -31,12 +33,20 @@ int main( int argc, char *argv[] )
       printf("Can't open file '%s' \n", argv[1]);
       exit(-1);
     }
+    // initialize linked list set to NULL
+    nodeptr p;
+    Init();
+    p = start;
     while( (t = yylex()) > 0)
     {
+      // create new token
+      // tok = create new token()
+      Add( p, tok);
       printf( "token '%d' text '%s'\n", t, yytext);
     }
-  
-      
+    // traverse to end of linked list
+    // print linked list
+    Print();
   return 0;
 }
 
