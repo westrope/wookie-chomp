@@ -34,9 +34,16 @@
 <include>[ /t]
 <include>"<iostream>"  { printf("found iostream\n"); 
                          BEGIN (INITIAL); }
-
-<include>\"   { BEGIN (INITIAL); }
-
+<include>"<cstdlib>"   { printf("found cstdlib\n");
+                         BEGIN (INITIAL); }
+<include>"<ctime>"     { printf("found ctime\n");
+                         BEGIN (INITIAL); }
+<include>"<string>"    { printf("found string\n");
+                         BEGIN (INITIAL); }
+<include>"<fstream>"   { printf("found fstream\n");
+                         BEGIN (INITIAL); }
+<include>\"([^ \n\t])\"    { printf("found user include\n");
+                             BEGIN(INITIAL); }
 
 
 "if"        { return IF; }
@@ -87,7 +94,7 @@
 <string>"\\"
 <string>\\0
 <string>\\["]
-<string>\"         {printf("found string");  BEGIN (INITIAL); }
+<string>\"         {printf("found string\n");  BEGIN (INITIAL); }
 
 "("         { return LP; }
 ")"         { return RP; }
@@ -120,4 +127,4 @@
 "+"         { return PLUS; }
 "-"         { return MINUS; }
 
-.           { /* Eat up all bad tokens */ }
+.           { printf("found bad token\n"); }
