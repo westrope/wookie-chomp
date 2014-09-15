@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #include "y.tab.h"
-#include "token.h"
+//#include "token.h"
 #include "list.h"
 
 extern FILE *yyin;
@@ -36,16 +36,18 @@ int main( int argc, char *argv[] )
     // initialize linked list set to NULL
     nodeptr p;
     Init();
-    p = start;
+    p =(struct node*)malloc(sizeof(struct node));
+    struct token* tok;
+    t_filename = argv[1];
     while( (t = yylex()) > 0)
     {
-      tok = CreateToken(t, yytext, t_filename, yylineno); 
-      if( t = SLIT){
+      tok = CreateToken(t, yytext, t_filename, 1); 
+      if( t == SLIT){
 	SetSval(tok, t_sval);
-	free(t_sval);
+	//	free(t_sval);
       }
       Add( p, tok);
-      printf( "token '%d' text '%s'\n", t, yytext);
+      //      printf( "token '%d' text '%s'\n", t, yytext);
     }
     // traverse to end of linked list
     // print linked list
