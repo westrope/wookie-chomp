@@ -1,0 +1,12 @@
+/* tree.c
+
+   Ian Westrope
+   CS 445
+*/
+
+#include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "tree.h"

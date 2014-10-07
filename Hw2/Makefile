@@ -1,0 +1,31 @@
+YACC=bison
+LEX=flex
+CC=gcc
+CFLAGS= -c -g
+
+all: 120++
+
+120++: 120lex.o main.o 120gram.o tree.o
+	$(CC) -o 120++  main.o 120lex.o 120gram.o tree.o -ll
+
+120gram.c 120gram.h: 120gram.y
+	$(YACC) -dt --verbose 120gram.y
+	mv -f 120gram.tab.c 120gram.c
+	mv -f 120gram.tab.h 120gram.h
+
+120lex.c: 120lex.l
+	$(LEX) 120lex.l
+	mv -f lex.yy.c 120lex.c
+
+120lex.o: 120lex.c 120gram.h
+	$(CC) $(CFLAGS) 120lex.c
+
+main.o: main.c 120gram.h
+	$(CC) $(CFLAGS) main.c
+
+tree.o: tree.c
+	$(CC) $(CFLAGS) tree.c
+
+clean:
+	rm -f 120 *.o
+	rm -f 120lex.c 120gram.c 120gram.h
