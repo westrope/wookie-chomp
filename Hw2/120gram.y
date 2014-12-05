@@ -61,7 +61,6 @@ static void yyerror(char *s);
   struct node *np;
   }
 
-%type < text > identifier
 
 %token IDENTIFIER INTEGER FLOATING CHARACTER STRING
 %token TYPEDEF_NAME NAMESPACE_NAME CLASS_NAME ENUM_NAME TEMPLATE_NAME
@@ -124,7 +123,8 @@ template_name:
  *----------------------------------------------------------------------*/
 
 identifier:
-IDENTIFIER { $$ = strdup(yylval.np->lexeme); }
+IDENTIFIER { // $$ = strdup(yylval.np->lexeme);
+}
 	;
 
 literal:
@@ -790,7 +790,8 @@ class_specifier:
 	;
 
 class_head:
-	  class_key identifier { typenametable_insert($2, CLASS_NAME); }
+	class_key identifier { //xtypenametable_insert($2, CLASS_NAME); 
+	                     }
 	| class_key identifier base_clause
 	| class_key nested_name_specifier identifier
 	| class_key nested_name_specifier identifier base_clause

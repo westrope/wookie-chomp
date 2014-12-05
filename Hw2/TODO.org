@@ -1,0 +1,14 @@
+* HW 2
+** TODO Make leaf nodes in lex file
+*** TODO Make function for creating tree nodes in flex file
+** TODO Make rules #DEFINE file
+** TODO Mke tree nodes in Bison file
+** TODO %defines in bison file
+
+** TODO fix flex file to include characters
+** TODO fix strings to replace escaped characters
+* HW 3
+** TODO Hash table
+** TODO Populate symbol table
+** TODO Type Checking
+
