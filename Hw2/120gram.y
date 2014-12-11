@@ -62,23 +62,64 @@ static void yyerror(char *s);
   }
 
 
-%token IDENTIFIER INTEGER FLOATING CHARACTER STRING
-%token TYPEDEF_NAME NAMESPACE_NAME CLASS_NAME ENUM_NAME TEMPLATE_NAME
+%token <np> IDENTIFIER INTEGER FLOATING CHARACTER STRING
+%token <np>TYPEDEF_NAME NAMESPACE_NAME CLASS_NAME ENUM_NAME TEMPLATE_NAME
 
-%token ELLIPSIS COLONCOLON DOTSTAR ADDEQ SUBEQ MULEQ DIVEQ MODEQ
-%token XOREQ ANDEQ OREQ SL SR SREQ SLEQ EQ NOTEQ LTEQ GTEQ ANDAND OROR
-%token PLUSPLUS MINUSMINUS ARROWSTAR ARROW
+%token <np> ELLIPSIS COLONCOLON DOTSTAR ADDEQ SUBEQ MULEQ DIVEQ MODEQ
+%token <np> XOREQ ANDEQ OREQ SL SR SREQ SLEQ EQ NOTEQ LTEQ GTEQ ANDAND OROR
+%token <np> PLUSPLUS MINUSMINUS ARROWSTAR ARROW
 
-%token ASM AUTO BOOL BREAK CASE CATCH CHAR CLASS CONST CONST_CAST CONTINUE
-%token DEFAULT DELETE DO DOUBLE DYNAMIC_CAST ELSE ENUM EXPLICIT EXPORT EXTERN
-%token FALSE FLOAT FOR FRIEND GOTO IF INLINE INT LONG MUTABLE NAMESPACE NEW
-%token OPERATOR PRIVATE PROTECTED PUBLIC REGISTER REINTERPRET_CAST RETURN
-%token SHORT SIGNED SIZEOF STATIC STATIC_CAST STRUCT SWITCH TEMPLATE THIS
-%token THROW TRUE TRY TYPEDEF TYPEID TYPENAME UNION UNSIGNED USING VIRTUAL
-%token VOID VOLATILE WCHAR_T WHILE
+%token <np> ASM AUTO BOOL BREAK CASE CATCH CHAR CLASS CONST CONST_CAST CONTINUE
+%token <np> DEFAULT DELETE DO DOUBLE DYNAMIC_CAST ELSE ENUM EXPLICIT EXPORT EXTERN
+%token <np> FALSE FLOAT FOR FRIEND GOTO IF INLINE INT LONG MUTABLE NAMESPACE NEW
+%token <np> OPERATOR PRIVATE PROTECTED PUBLIC REGISTER REINTERPRET_CAST RETURN
+%token <np> SHORT SIGNED SIZEOF STATIC STATIC_CAST STRUCT SWITCH TEMPLATE THIS
+%token <np THROW TRUE TRY TYPEDEF TYPEID TYPENAME UNION UNSIGNED USING VIRTUAL
+%token <np> VOID VOLATILE WCHAR_T WHILE
 
 
  // %type goes here
+%type <np> start translation_unit namespace_name original_namespace_name class_name enum_name
+%type <np> template_name identifier literal integer_literal character_literal floating_literal
+%type <np> string_literal boolean_literal translation_unit primary_expression unqualified_id
+%type <np> qualified_id nested_name_specifier postfix_expression expression_list unary_expression
+%type <np> unary_operator new_expression new_placement new_type_id new_declarator 
+%type <np> direct_new_declarator new_initializer delete_expression cast_expression 
+%type <np> pm_expression multiplicative_expression additive_expression shift_expression
+%type <np> relational_expression equality_expression and_expression exclusive_or_expression
+%type <np> inclusive_or_expression logical_and_expression logical_or_expression 
+%type <np> conditional_expression assignment_expression assignment_operator expression
+%type <np> constant_expression statement labeled_statement expression_statment compound_statement
+%type <np> statement_seq selection_statement condition iteration_statement for_init_statement
+%type <np> jump_statement declaration_statement declaration_seq declaration block_declaration
+%type <np> simple_declaration decl_specifier decl_specifier_seq storage_class_specifier
+%type <np> function_specifier type_specifier simple_type_specifier type_name 
+%type <np> elaborated_type_specifier enum_specifier enumerator_list enumerator_definition
+%type <np> enumerator namespace_definition named_namespace_defintion orginal_namespace_defintion
+%type <np> extension_namespace_defintion unnamed_namespace_defintion namespace_body
+%type <np> namespace_alias_defintion qualified_namespace_specifier using_declaration
+%type <np> using_directive asm_defintion linkage_specification init_declarator_list
+%type <np> init_declarator_list init_declarator declarator direct_declarator ptr_operator
+%type <np> cv_qualifier_seq cv_qualifier declarator_id type_id type_specifier_seq 
+%type <np> abstract_declarator direct_abstract_declarator parameter_declaration_clause
+%type <np> parameter_declaration_list parameter_declaration function_defintion function_body
+%type <np> initializer initializer_clause initializer_list class_specifier class_head
+%type <np> class_key member_specification member_declaration member_declarator_list
+%type <np> member_declarator pure_specifier constant_initializer base_clause
+%type <np> base_specifier_list base_specifier access_specifier conversion_function_id
+%type <np> conversion_type_id conversion_declarator ctor_initalizer mem_initializer_list
+%type <np> mem_initializer mem_initializer_id operator_function_id operator
+%type <np> template_declaration template_parameter_list template_parameter type_parameter
+%type <np> template_id template_argument_list template_argument explicit_instantiation
+%type <np> explicit_specialization try_block function_try_block handler_seq handler
+%type <np> exception_declaration throw_expression exception_specification type_id_list
+%type <np> declaration_seq_opt nested_name_specifier_opt expression_list_opt COLONCOLON_opt
+%type <np> new_placement_opt new_initializer_opt new_declarator_opt expression_opt
+%type <np> statement_seq_opt condition_opt enumerator_list_opt initializer_opt 
+%type <np> constant_expression_opt abstract_declarator_opt type_specifier_seq_opt
+%type <np> direct_abstract_declarator_opt ctor_initializer_opt COMMA_opt member_specification_opt
+%type <np> SEMICOLON_opt conversion_declarator_opt EXPORT_opt handler_seq_opt
+%type <np> assignment_expression_opt type_id_list_opt
 
 %start translation_unit
 
