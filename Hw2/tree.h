@@ -13,7 +13,6 @@ struct node{
       int val;
     } t;
     struct nonleaf {
-      int rule;
       struct node *child[9];
     } nt;
   } u;
@@ -21,5 +20,5 @@ struct node{
 
 struct node * treenode(int symbol);
 struct node * alcleaf( int symbol, char *lexeme);
-struct node * alcnary(int symbol, int prodrule, int nkids, ...);
+struct node * alcnary(int symbol, int nkids, ...);
 void treeprint(struct node *np);

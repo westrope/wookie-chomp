@@ -32,12 +32,11 @@ struct node * alcleaf(int symbol, char *lexeme)
 }
 
 
-struct node * alcnary(int symbol, int prodrule, int nkids, ...)
+struct node * alcnary(int symbol, int nkids, ...)
 {
    int i;
    va_list mylist;
    struct node *rv = treenode(symbol);
-   rv->u.nt.rule = prodrule;
    va_start(mylist, nkids);
    for(i=0; i<nkids; i++) {
       rv->u.nt.child[i] = va_arg(mylist, struct node *);
@@ -63,8 +62,8 @@ void treeprint(struct node *np)
       int i;
       for (i=0; np->u.nt.child[i] != NULL; i++ ) {
       	treeprint(np->u.nt.child[i]);
-       	if( np->u.nt.rule == 5001 || np->u.nt.rule == 4001
-	    || np->u.nt.rule == 4002) {
+       	if( np->symbol == 5001 || np->symbol == 4001
+	    || np->symbol == 4002) {
 	  
 	  printf("\n");
 	}
