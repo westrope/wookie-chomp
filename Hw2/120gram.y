@@ -240,7 +240,7 @@ qualified_id:
 	;
 
 nested_name_specifier:
-	class_name COLONCOLON nested_name_specifier
+        class_name COLONCOLON nested_name_specifier
 	namespace_name COLONCOLON nested_name_specifier { $$ = alcnary(NESTED_NAME_SPECIFIER1, 6, $1, $2, $3, $4, $5, $6); }
 	| class_name COLONCOLON { $$ = alcnary(NESTED_NAME_SPECIFIER2, 2, $1, $2); }
 	| namespace_name COLONCOLON { $$ = alcnary(NESTED_NAME_SPECIFIER3, 2, $1, $2); }
@@ -248,15 +248,15 @@ nested_name_specifier:
 
 postfix_expression:
 	primary_expression { $$ = $1; }
-	| postfix_expression '[' expression ']'
-	| postfix_expression '(' expression_list_opt ')'
-	| postfix_expression '.' TEMPLATE COLONCOLON id_expression
-	| postfix_expression '.' TEMPLATE id_expression
-	| postfix_expression '.' COLONCOLON id_expression
+| postfix_expression '[' expression ']' { $$ = alcnary(POSTFIX_EXPRESSION2, 4, $1, $2, $3, $4); }
+	| postfix_expression '(' expression_list_opt ')' { $$ = alcnary(POSTFIX_EXPRESSION3, 4, $1, $2, $3, $4); }
+	| postfix_expression '.' TEMPLATE COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION4, 4, $1, $2, $3, $4); }
+	| postfix_expression '.' TEMPLATE id_expression { $$ = alcnary(POSTFIX_EXPRESSION5, 4, $1, $2, $3, $4); }
+	| postfix_expression '.' COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION6, 4, $1, $2, $3, $4); }
 	| postfix_expression '.' id_expression { $$ = alcnary(POSTFIX_EXPRESSION7, 3, $1, $2, $3); }
 	| postfix_expression ARROW TEMPLATE COLONCOLON id_expression
-	| postfix_expression ARROW TEMPLATE id_expression
-	| postfix_expression ARROW COLONCOLON id_expression
+	| postfix_expression ARROW TEMPLATE id_expression { $$ = alcnary(POSTFIX_EXPRESSION9, 4, $1, $2, $3, $4); }
+	| postfix_expression ARROW COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION10, 4, $1, $2, $3, $4); }
 	| postfix_expression ARROW id_expression { $$ = alcnary(POSTFIX_EXPRESSION11, 3, $1, $2, $3); }
 	| postfix_expression PLUSPLUS { $$ = alcnary(POSTFIX_EXPRESSION12, 2, $1, $2); }
 	| postfix_expression MINUSMINUS { $$ = alcnary(POSTFIX_EXPRESSION13, 2, $1, $2); }
@@ -264,8 +264,8 @@ postfix_expression:
 	| STATIC_CAST '<' type_id '>' '(' expression ')'
 	| REINTERPRET_CAST '<' type_id '>' '(' expression ')'
 	| CONST_CAST '<' type_id '>' '(' expression ')'
-	| TYPEID '(' expression ')'
-	| TYPEID '(' type_id ')'
+	| TYPEID '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION18, 4, $1, $2, $3, $4); }
+	| TYPEID '(' type_id ')' { $$ = alcnary(POSTFIX_EXPRESSION19, 4, $1, $2, $3, $4); }
 	;
 
 expression_list:
@@ -281,7 +281,7 @@ unary_expression:
 	| '&' cast_expression { $$ = alcnary(UNARY_EXPRESSION5, 2, $1, $2); }
 	| unary_operator cast_expression { $$ = alcnary(UNARY_EXPRESSION6, 2, $1, $2); }
 	| SIZEOF unary_expression { $$ = alcnary(UNARY_EXPRESSION7, 2, $1, $2); }
-	| SIZEOF '(' type_id ')'
+	| SIZEOF '(' type_id ')' { $$ = alcnary(UNARY_EXPRESSION8, 4, $1, $2, $3, $4); }
 	| new_expression { $$ = $1; }
 	| delete_expression { $$ = $1; }
 	;
@@ -294,7 +294,7 @@ unary_operator:
 	;
 
 new_expression:
-	  NEW new_placement_opt new_type_id new_initializer_opt
+	  NEW new_placement_opt new_type_id new_initializer_opt { $$ = alcnary(NEW_EXPRESSION1, 4, $1, $2, $3, $4); }
 	| COLONCOLON NEW new_placement_opt new_type_id new_initializer_opt
 	| NEW new_placement_opt '(' type_id ')' new_initializer_opt
 	| COLONCOLON NEW new_placement_opt '(' type_id ')' new_initializer_opt
@@ -315,7 +315,7 @@ new_declarator:
 
 direct_new_declarator:
 	'[' expression ']' { $$ = alcnary(DIRECT_NEW_DECLARATOR1, 3, $1, $2, $3); }
-	| direct_new_declarator '[' constant_expression ']'
+	| direct_new_declarator '[' constant_expression ']' { $$ = alcnary(DIRECT_NEW_DECLARATOR2, 4, $1, $2, $3, $4); }
 	;
 
 new_initializer:
@@ -325,13 +325,13 @@ new_initializer:
 delete_expression:
 DELETE cast_expression { $$ = alcnary(DELETE_EXPRESSION1, 2, $1, $2); }
 	| COLONCOLON DELETE cast_expression { $$ = alcnary(DELETE_EXPRESSION2, 3, $1, $2, $3); }
-	| DELETE '[' ']' cast_expression
+	| DELETE '[' ']' cast_expression { $$ = alcnary(DELETE_EXPRESSION3, 4, $1, $2, $3, $4); }
 	| COLONCOLON DELETE '[' ']' cast_expression
 	;
 
 cast_expression:
 	unary_expression { $$ = $1; }
-	| '(' type_id ')' cast_expression
+	| '(' type_id ')' cast_expression { $$ = alcnary(CAST_EXPRESSION2, 4, $1, $2, $3, $4); }
 	;
 
 pm_expression:
@@ -449,7 +449,7 @@ statement:
 
 labeled_statement:
 	identifier ':' statement { $$ = alcnary(LABELED_STATEMENT1, 3, $1, $2, $3); }
-	| CASE constant_expression ':' statement
+	| CASE constant_expression ':' statement { $$ = alcnary(LABELED_STATEMENT2, 4, $1, $2, $3, $4); }
 	| DEFAULT ':' statement { $$ = alcnary(LABELED_STATEMENT3, 3, $1, $2, $3); }
 	;
 
@@ -590,12 +590,12 @@ type_name:
 	;
 
 elaborated_type_specifier:
-	  class_key COLONCOLON nested_name_specifier identifier
+	  class_key COLONCOLON nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER1, 4, $1, $2, $3, $4); }
 	| class_key COLONCOLON identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER2, 3, $1, $2, $3); }
-	| ENUM COLONCOLON nested_name_specifier identifier
+	| ENUM COLONCOLON nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER3, 4, $1, $2, $3, $4); }
 	| ENUM COLONCOLON identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER4, 3, $1, $2, $3); }
 	| ENUM nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER5, 3, $1, $2, $3); }
-	| TYPENAME COLONCOLON_opt nested_name_specifier identifier
+	| TYPENAME COLONCOLON_opt nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER6, 4, $1, $2, $3, $4); }
 	| TYPENAME COLONCOLON_opt nested_name_specifier identifier '<' template_argument_list '>'
 	;
 
@@ -653,7 +653,7 @@ extension_namespace_definition:
 	;
 
 unnamed_namespace_definition:
-	NAMESPACE '{' namespace_body '}'
+	NAMESPACE '{' namespace_body '}' { $$ = alcnary(UNNAMED_NAMESPACE_DEFINITION1, 4, $1, $2, $3, $4); }
 	;
 
 namespace_body:
@@ -681,15 +681,15 @@ using_declaration:
 	  USING TYPENAME COLONCOLON nested_name_specifier unqualified_id ';'
 	| USING TYPENAME nested_name_specifier unqualified_id ';'
 	| USING COLONCOLON nested_name_specifier unqualified_id ';'
-	| USING nested_name_specifier unqualified_id ';'
-	| USING COLONCOLON unqualified_id ';'
+	| USING nested_name_specifier unqualified_id ';' { $$ = alcnary(USING_DECLARATION4, 4, $1, $2, $3, $4); }
+	| USING COLONCOLON unqualified_id ';' { $$ = alcnary(USING_DECLARATION5, 4, $1, $2, $3, $4); }
 	;
 
 using_directive:
 	USING NAMESPACE COLONCOLON nested_name_specifier namespace_name ';'
 	| USING NAMESPACE COLONCOLON namespace_name ';'
 	| USING NAMESPACE nested_name_specifier namespace_name ';'
-	| USING NAMESPACE namespace_name ';'
+	| USING NAMESPACE namespace_name ';' { $$ = alcnary(USING_DIRECTIVE4, 4, $1, $2, $3, $4); }
 	;
 
 asm_definition:
@@ -724,11 +724,11 @@ direct_declarator:
 	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq exception_specification
 	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq
 	| direct_declarator '('parameter_declaration_clause ')' exception_specification
-	| direct_declarator '('parameter_declaration_clause ')'
-	| CLASS_NAME '('parameter_declaration_clause ')'
+	| direct_declarator '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR4, 4, $1, $2, $3, $4); }
+	| CLASS_NAME '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR5, 4, $1, $2, $3, $4); }
 	| CLASS_NAME COLONCOLON declarator_id '('parameter_declaration_clause ')'
 	| CLASS_NAME COLONCOLON CLASS_NAME '('parameter_declaration_clause ')'
-	| direct_declarator '[' constant_expression_opt ']'
+	| direct_declarator '[' constant_expression_opt ']' { $$ = alcnary(DIRECT_DECLARATOR8, 4, $1, $2, $3, $4); }
 	| '(' declarator ')' { $$ = alcnary(DIRECT_DECLARATOR10, 3, $1, $2, $3); }
 	;
 
@@ -739,7 +739,7 @@ ptr_operator:
 	| nested_name_specifier '*' { $$ = alcnary(PTR_OPERATOR4, 2, $1, $2); }
 	| nested_name_specifier '*' cv_qualifier_seq { $$ = alcnary(PTR_OPERATOR5, 3, $1, $2, $3); }
 	| COLONCOLON nested_name_specifier '*' { $$ = alcnary(PTR_OPERATOR6, 3, $1, $2, $3); }
-	| COLONCOLON nested_name_specifier '*' cv_qualifier_seq
+	| COLONCOLON nested_name_specifier '*' cv_qualifier_seq { $$ = alcnary(PTR_OPERATOR7, 4, $1, $2, $3, $4); }
 	;
 
 cv_qualifier_seq:
@@ -776,8 +776,8 @@ direct_abstract_declarator:
 	  direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq exception_specification
 	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq
 	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' exception_specification
-	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')'
-	| direct_abstract_declarator_opt '[' constant_expression_opt ']'
+	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR4, 4, $1, $2, $3, $4); }
+	| direct_abstract_declarator_opt '[' constant_expression_opt ']' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR5, 4, $1, $2, $3, $4); }
 	| '(' abstract_declarator ')' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR6, 3, $1, $2, $3); }
 	;
 
@@ -798,12 +798,12 @@ parameter_declaration:
 	decl_specifier_seq declarator  { $$ = alcnary(PARAMETER_DECLARATION1, 2, $1, $2); }
 	| decl_specifier_seq declarator '=' assignment_expression { $$ = alcnary(PARAMETER_DECLARATION2, 3, $1, $2, $3); }
 	| decl_specifier_seq abstract_declarator_opt { $$ = alcnary(PARAMETER_DECLARATION3, 2, $1, $2); }
-	| decl_specifier_seq abstract_declarator_opt '=' assignment_expression
+	| decl_specifier_seq abstract_declarator_opt '=' assignment_expression { $$ = alcnary(PARAMETER_DECLARATION4, 4, $1, $2, $3, $4); }
 	;
 
 function_definition:
 	  declarator ctor_initializer_opt function_body { $$ = alcnary(FUNCTION_DEFINITION1, 3, $1, $2, $3); }
-	| decl_specifier_seq declarator ctor_initializer_opt function_body
+	| decl_specifier_seq declarator ctor_initializer_opt function_body { $$ = alcnary(FUNCTION_DEFINITION2, 4, $1, $2, $3, $4); }
 	| declarator function_try_block { $$ = alcnary(FUNCTION_DEFINITION3, 2, $1, $2); }
 	| decl_specifier_seq declarator function_try_block { $$ = alcnary(FUNCTION_DEFINITION4, 3, $1, $2, $3); }
 	;
@@ -819,7 +819,7 @@ initializer:
 
 initializer_clause:
 	assignment_expression { $$ = $1; }
-	| '{' initializer_list COMMA_opt '}'
+	| '{' initializer_list COMMA_opt '}' { $$ = alcnary(INITIALIZER_CLAUSE2, 4, $1, $2, $3, $4); }
 	| '{' '}' { $$ = alcnary(INITIALIZER_CLAUSE3, 2, $1, $2); }
 	;
 
@@ -833,7 +833,7 @@ initializer_list:
  *----------------------------------------------------------------------*/
 
 class_specifier:
-	class_head '{' member_specification_opt '}'
+	class_head '{' member_specification_opt '}' { $$ = alcnary(CLASS_SPECIFIER1, 4, $1, $2, $3, $4); }
 	;
 
 class_head:
@@ -841,7 +841,7 @@ class_head:
 	                     
 	| class_key identifier base_clause { $$ = alcnary(CLASS_HEAD2, 3, $1, $2, $3); }
 	| class_key nested_name_specifier identifier { $$ = alcnary(CLASS_HEAD3, 3, $1, $2, $3); }
-	| class_key nested_name_specifier identifier base_clause
+	| class_key nested_name_specifier identifier base_clause { $$ = alcnary(CLASS_HEAD4, 4, $1, $2, $3, $4); }
 	;
 
 class_key:
@@ -907,12 +907,12 @@ base_specifier:
 	| nested_name_specifier class_name { $$ = alcnary(BASE_SPECIFIER3, 2, $1, $2); }
 	| class_name { $$ = $1; }
 	| VIRTUAL access_specifier COLONCOLON nested_name_specifier_opt class_name
-	| VIRTUAL access_specifier nested_name_specifier_opt class_name
-	| VIRTUAL COLONCOLON nested_name_specifier_opt class_name
+	| VIRTUAL access_specifier nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER6, 4, $1, $2, $3, $4); }
+	| VIRTUAL COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER7, 4, $1, $2, $3, $4); }
 	| VIRTUAL nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER8, 3, $1, $2, $3); }
 	| access_specifier VIRTUAL COLONCOLON nested_name_specifier_opt class_name
-	| access_specifier VIRTUAL nested_name_specifier_opt class_name
-	| access_specifier COLONCOLON nested_name_specifier_opt class_name
+	| access_specifier VIRTUAL nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER10, 4, $1, $2, $3, $4); }
+	| access_specifier COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER11, 4, $1, $2, $3, $4); }
 	| access_specifier nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER12, 3, $1, $2, $3); }
 	;
 
@@ -948,7 +948,7 @@ mem_initializer_list:
 	;
 
 mem_initializer:
-	mem_initializer_id '(' expression_list_opt ')'
+	mem_initializer_id '(' expression_list_opt ')' { $$ = alcnary(MEM_INITIALIZER1, 4, $1, $2, $3, $4); }
 	;
 
 mem_initializer_id:
@@ -1032,15 +1032,15 @@ template_parameter:
 
 type_parameter:
 	  CLASS identifier { $$ = alcnary(TYPE_PARAMETER1, 2, $1, $2); }
-	| CLASS identifier '=' type_id
+	| CLASS identifier '=' type_id { $$ = alcnary(TYPE_PARAMETER2, 4, $1, $2, $3, $4); }
 	| TYPENAME identifier { $$ = alcnary(TYPE_PARAMETER3, 2, $1, $2); }
-	| TYPENAME identifier '=' type_id
+	| TYPENAME identifier '=' type_id { $$ = alcnary(TYPE_PARAMETER4, 4, $1, $2, $3, $4); }
 	| TEMPLATE '<' template_parameter_list '>' CLASS identifier
 	| TEMPLATE '<' template_parameter_list '>' CLASS identifier '=' template_name
 	;
 
 template_id:
-	template_name '<' template_argument_list '>'
+	template_name '<' template_argument_list '>' { $$ = alcnary(TEMPLATE_ID1, 4, $1, $2, $3, $4); }
 	;
 
 template_argument_list:
@@ -1059,7 +1059,7 @@ explicit_instantiation:
 	;
 
 explicit_specialization:
-	TEMPLATE '<' '>' declaration
+	TEMPLATE '<' '>' declaration { $$ = alcnary(EXPLICIT_SPECIALIZATION1, 4, $1, $2, $3, $4); }
 	;
 
 /*----------------------------------------------------------------------
@@ -1071,7 +1071,7 @@ try_block:
 	;
 
 function_try_block:
-	TRY ctor_initializer_opt function_body handler_seq
+	TRY ctor_initializer_opt function_body handler_seq { $$ = alcnary(FUNCTION_TRY_BLOCK1, 4, $1, $2, $3, $4); }
 	;
 
 handler_seq:
@@ -1094,7 +1094,7 @@ throw_expression:
 	;
 
 exception_specification:
-	THROW '(' type_id_list_opt ')'
+	THROW '(' type_id_list_opt ')' { $$ = alcnary(EXCEPTION_SPECIFICATION1, 4, $1, $2, $3, $4);} 
 	;
 
 type_id_list:
