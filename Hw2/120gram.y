@@ -254,16 +254,16 @@ postfix_expression:
 	| postfix_expression '.' TEMPLATE id_expression { $$ = alcnary(POSTFIX_EXPRESSION5, 4, $1, $2, $3, $4); }
 	| postfix_expression '.' COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION6, 4, $1, $2, $3, $4); }
 	| postfix_expression '.' id_expression { $$ = alcnary(POSTFIX_EXPRESSION7, 3, $1, $2, $3); }
-	| postfix_expression ARROW TEMPLATE COLONCOLON id_expression
+| postfix_expression ARROW TEMPLATE COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION8, 5, $1, $2, $3, $4, $5); }
 	| postfix_expression ARROW TEMPLATE id_expression { $$ = alcnary(POSTFIX_EXPRESSION9, 4, $1, $2, $3, $4); }
 	| postfix_expression ARROW COLONCOLON id_expression { $$ = alcnary(POSTFIX_EXPRESSION10, 4, $1, $2, $3, $4); }
 	| postfix_expression ARROW id_expression { $$ = alcnary(POSTFIX_EXPRESSION11, 3, $1, $2, $3); }
 	| postfix_expression PLUSPLUS { $$ = alcnary(POSTFIX_EXPRESSION12, 2, $1, $2); }
 	| postfix_expression MINUSMINUS { $$ = alcnary(POSTFIX_EXPRESSION13, 2, $1, $2); }
-	| DYNAMIC_CAST '<' type_id '>' '(' expression ')'
-	| STATIC_CAST '<' type_id '>' '(' expression ')'
-	| REINTERPRET_CAST '<' type_id '>' '(' expression ')'
-	| CONST_CAST '<' type_id '>' '(' expression ')'
+| DYNAMIC_CAST '<' type_id '>' '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION14, 7, $1, $2, $3, $4, $5, $6, $7); }
+	| STATIC_CAST '<' type_id '>' '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION15, 7, $1, $2, $3, $4, $5, $6, $7); }
+	| REINTERPRET_CAST '<' type_id '>' '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION16, 7, $1, $2, $3, $4, $5, $6, $7); }
+	| CONST_CAST '<' type_id '>' '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION17, 7, $1, $2, $3, $4, $5, $6, $7); }
 	| TYPEID '(' expression ')' { $$ = alcnary(POSTFIX_EXPRESSION18, 4, $1, $2, $3, $4); }
 	| TYPEID '(' type_id ')' { $$ = alcnary(POSTFIX_EXPRESSION19, 4, $1, $2, $3, $4); }
 	;
@@ -295,9 +295,9 @@ unary_operator:
 
 new_expression:
 	  NEW new_placement_opt new_type_id new_initializer_opt { $$ = alcnary(NEW_EXPRESSION1, 4, $1, $2, $3, $4); }
-	| COLONCOLON NEW new_placement_opt new_type_id new_initializer_opt
-	| NEW new_placement_opt '(' type_id ')' new_initializer_opt
-	| COLONCOLON NEW new_placement_opt '(' type_id ')' new_initializer_opt
+| COLONCOLON NEW new_placement_opt new_type_id new_initializer_opt { $$ = alcnary(NEW_EXPRESSION2, 5, $1, $2, $3, $4, $5); }
+| NEW new_placement_opt '(' type_id ')' new_initializer_opt { $$ = alcnary(NEW_EXPRESSION3, 6, $1, $2, $3, $4, $5, $6); }
+| COLONCOLON NEW new_placement_opt '(' type_id ')' new_initializer_opt { $$ = alcnary(NEW_EXPRESSION4, 7, $1, $2, $3, $4, $5, $6, $7); }
 	;
 
 new_placement:
@@ -326,7 +326,7 @@ delete_expression:
 DELETE cast_expression { $$ = alcnary(DELETE_EXPRESSION1, 2, $1, $2); }
 	| COLONCOLON DELETE cast_expression { $$ = alcnary(DELETE_EXPRESSION2, 3, $1, $2, $3); }
 	| DELETE '[' ']' cast_expression { $$ = alcnary(DELETE_EXPRESSION3, 4, $1, $2, $3, $4); }
-	| COLONCOLON DELETE '[' ']' cast_expression
+| COLONCOLON DELETE '[' ']' cast_expression { $$ = alcnary(DELETE_EXPRESSION4, 5, $1, $2, $3, $4, $5); }
 	;
 
 cast_expression:
@@ -400,7 +400,7 @@ logical_or_expression:
 
 conditional_expression:
 	logical_or_expression { $$ = $1; }
-	| logical_or_expression  '?' expression ':' assignment_expression
+	| logical_or_expression  '?' expression ':' assignment_expression { $$ = alcnary(CONDITIONAL_EXPRESSION2, 5, $1, $2, $3, $4, $5); }
 	;
 
 assignment_expression:
@@ -467,9 +467,9 @@ statement_seq:
 	;
 
 selection_statement:
-	IF '(' condition ')' statement
-	| IF '(' condition ')' statement ELSE statement
-	| SWITCH '(' condition ')' statement
+	IF '(' condition ')' statement { $$ = alcnary(SELECTION_STATEMENT1, 5, $1, $2, $3, $4, $5); }
+| IF '(' condition ')' statement ELSE statement { $$ = alcnary(SELECTION_STATEMENT2, 7, $1, $2, $3, $4, $5, $6, $7); }
+	| SWITCH '(' condition ')' statement { $$ = alcnary(SELECTION_STATEMENT3, 5, $1, $2, $3, $4, $5); }
 	;
 
 condition:
@@ -478,9 +478,9 @@ condition:
 	;
 
 iteration_statement:
-	WHILE '(' condition ')' statement
-	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' for_init_statement condition_opt ';' expression_opt ')' statement
+	WHILE '(' condition ')' statement { $$ = alcnary(ITERATION_STATEMENT1, 5, $1, $2, $3, $4, $5); }
+| DO statement WHILE '(' expression ')' ';' { $$ = alcnary(ITERATION_STATEMENT2, 7, $1, $2, $3, $4, $5, $6, $7); }
+| FOR '(' for_init_statement condition_opt ';' expression_opt ')' statement { $$ = alcnary(ITERATION_STATEMENT3, 8, $1, $2, $3, $4, $5, $6, $7, $8); }
 	;
 
 for_init_statement:
@@ -596,7 +596,7 @@ elaborated_type_specifier:
 	| ENUM COLONCOLON identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER4, 3, $1, $2, $3); }
 	| ENUM nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER5, 3, $1, $2, $3); }
 	| TYPENAME COLONCOLON_opt nested_name_specifier identifier { $$ = alcnary(ELABORATED_TYPE_SPECIFIER6, 4, $1, $2, $3, $4); }
-	| TYPENAME COLONCOLON_opt nested_name_specifier identifier '<' template_argument_list '>'
+| TYPENAME COLONCOLON_opt nested_name_specifier identifier '<' template_argument_list '>' { $$ = alcnary(ELABORATED_TYPE_SPECIFIER7, 7, $1, $2, $3, $4, $5, $6, $7); }
 	;
 
 /*
@@ -606,7 +606,7 @@ enum_name:
 */
 
 enum_specifier:
-	ENUM identifier '{' enumerator_list_opt '}'
+	ENUM identifier '{' enumerator_list_opt '}' { $$ = alcnary(ENUM_SPECIFIER1, 5, $1, $2, $3, $4, $5); }
 	;
 
 enumerator_list:
@@ -645,11 +645,11 @@ named_namespace_definition:
 	;
 
 original_namespace_definition:
-	NAMESPACE identifier '{' namespace_body '}'
+	NAMESPACE identifier '{' namespace_body '}' { $$ = alcnary(ORIGINAL_NAMESPACE_DEFINITION1, 5, $1, $2, $3, $4, $5); }
 	;
 
 extension_namespace_definition:
-	NAMESPACE original_namespace_name '{' namespace_body '}'
+	NAMESPACE original_namespace_name '{' namespace_body '}' { $$ = alcnary(EXTENSION_NAMESPACE_DEFINITION1, 5, $1, $2, $3, $4, $5); }
 	;
 
 unnamed_namespace_definition:
@@ -667,7 +667,7 @@ namespace_alias:
 */
 
 namespace_alias_definition:
-	NAMESPACE identifier '=' qualified_namespace_specifier ';'
+	NAMESPACE identifier '=' qualified_namespace_specifier ';' { $$ = alcnary(NAMESPACE_ALIAS_DEFINITION1, 5, $1, $2, $3, $4, $5); }
 	;
 
 qualified_namespace_specifier:
@@ -678,27 +678,27 @@ qualified_namespace_specifier:
 	;
 
 using_declaration:
-	  USING TYPENAME COLONCOLON nested_name_specifier unqualified_id ';'
-	| USING TYPENAME nested_name_specifier unqualified_id ';'
-	| USING COLONCOLON nested_name_specifier unqualified_id ';'
+USING TYPENAME COLONCOLON nested_name_specifier unqualified_id ';' { $$ = alcnary(USING_DECLARATION1, 6, $1, $2, $3, $4, $5, $6); }
+	| USING TYPENAME nested_name_specifier unqualified_id ';' { $$ = alcnary(USING_DECLARATION2, 5, $1, $2, $3, $4, $5); }
+	| USING COLONCOLON nested_name_specifier unqualified_id ';' { $$ = alcnary(USING_DECLARATION3, 5, $1, $2, $3, $4, $5); }
 	| USING nested_name_specifier unqualified_id ';' { $$ = alcnary(USING_DECLARATION4, 4, $1, $2, $3, $4); }
 	| USING COLONCOLON unqualified_id ';' { $$ = alcnary(USING_DECLARATION5, 4, $1, $2, $3, $4); }
 	;
 
 using_directive:
-	USING NAMESPACE COLONCOLON nested_name_specifier namespace_name ';'
-	| USING NAMESPACE COLONCOLON namespace_name ';'
-	| USING NAMESPACE nested_name_specifier namespace_name ';'
+USING NAMESPACE COLONCOLON nested_name_specifier namespace_name ';' { $$ = alcnary(USING_DIRECTIVE1, 6, $1, $2, $3, $4, $5, $6); }
+	| USING NAMESPACE COLONCOLON namespace_name ';' { $$ = alcnary(USING_DIRECTIVE2, 5, $1, $2, $3, $4, $5); }
+	| USING NAMESPACE nested_name_specifier namespace_name ';' { $$ = alcnary(USING_DIRECTIVE3, 5, $1, $2, $3, $4, $5); }
 	| USING NAMESPACE namespace_name ';' { $$ = alcnary(USING_DIRECTIVE4, 4, $1, $2, $3, $4); }
 	;
 
 asm_definition:
-	ASM '(' string_literal ')' ';'
+	ASM '(' string_literal ')' ';' { $$ = alcnary(ASM_DEFINITION1, 5, $1, $2, $3, $4, $5); }
 	;
 
 linkage_specification:
-	EXTERN string_literal '{' declaration_seq_opt '}'
-	| EXTERN string_literal declaration { $$ = alcnary(LINKAGE_SPECIFICATION1, 3, $1, $2, $3); }
+	EXTERN string_literal '{' declaration_seq_opt '}' { $$ = alcnary(LINKAGE_SPECIFICATION1, 5, $1, $2, $3, $4, $5); }
+	| EXTERN string_literal declaration { $$ = alcnary(LINKAGE_SPECIFICATION2, 3, $1, $2, $3); }
 	;
 
 /*----------------------------------------------------------------------
@@ -721,14 +721,14 @@ declarator:
 
 direct_declarator:
 	  declarator_id { $$ = $1; }
-	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq exception_specification
-	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq
-	| direct_declarator '('parameter_declaration_clause ')' exception_specification
-	| direct_declarator '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR4, 4, $1, $2, $3, $4); }
-	| CLASS_NAME '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR5, 4, $1, $2, $3, $4); }
-	| CLASS_NAME COLONCOLON declarator_id '('parameter_declaration_clause ')'
-	| CLASS_NAME COLONCOLON CLASS_NAME '('parameter_declaration_clause ')'
-	| direct_declarator '[' constant_expression_opt ']' { $$ = alcnary(DIRECT_DECLARATOR8, 4, $1, $2, $3, $4); }
+| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq exception_specification { $$ = alcnary(DIRECT_DECLARATOR2, 6, $1, $2, $3, $4, $5, $6); }
+	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq { $$ = alcnary(DIRECT_DECLARATOR3, 5, $1, $2, $3, $4, $5); }
+	| direct_declarator '('parameter_declaration_clause ')' exception_specification { $$ = alcnary(DIRECT_DECLARATOR4, 5, $1, $2, $3, $4, $5); }
+	| direct_declarator '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR5, 4, $1, $2, $3, $4); }
+	| CLASS_NAME '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR6, 4, $1, $2, $3, $4); }
+| CLASS_NAME COLONCOLON declarator_id '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR7, 6, $1, $2, $3, $4, $5, $6); }
+	| CLASS_NAME COLONCOLON CLASS_NAME '('parameter_declaration_clause ')' { $$ = alcnary(DIRECT_DECLARATOR8, 6, $1, $2, $3, $4, $5, $6); }
+	| direct_declarator '[' constant_expression_opt ']' { $$ = alcnary(DIRECT_DECLARATOR9, 4, $1, $2, $3, $4); }
 	| '(' declarator ')' { $$ = alcnary(DIRECT_DECLARATOR10, 3, $1, $2, $3); }
 	;
 
@@ -773,9 +773,9 @@ abstract_declarator:
 	;
 
 direct_abstract_declarator:
-	  direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq exception_specification
-	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq
-	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' exception_specification
+	  direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq exception_specification { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR1, 5, $1, $2, $3, $4, $5); }
+	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' cv_qualifier_seq { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR2, 5, $1, $2, $3, $4, $5); }
+	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' exception_specification { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR3, 5, $1, $2, $3, $4, $5); }
 	| direct_abstract_declarator_opt '(' parameter_declaration_clause ')' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR4, 4, $1, $2, $3, $4); }
 	| direct_abstract_declarator_opt '[' constant_expression_opt ']' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR5, 4, $1, $2, $3, $4); }
 	| '(' abstract_declarator ')' { $$ = alcnary(DIRECT_ABSTRACT_DECLARATOR6, 3, $1, $2, $3); }
@@ -906,11 +906,11 @@ base_specifier:
 	| COLONCOLON class_name { $$ = alcnary(BASE_SPECIFIER2, 2, $1, $2); }
 	| nested_name_specifier class_name { $$ = alcnary(BASE_SPECIFIER3, 2, $1, $2); }
 	| class_name { $$ = $1; }
-	| VIRTUAL access_specifier COLONCOLON nested_name_specifier_opt class_name
+	| VIRTUAL access_specifier COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER5, 5, $1, $2, $3, $4, $5); }
 	| VIRTUAL access_specifier nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER6, 4, $1, $2, $3, $4); }
 	| VIRTUAL COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER7, 4, $1, $2, $3, $4); }
 	| VIRTUAL nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER8, 3, $1, $2, $3); }
-	| access_specifier VIRTUAL COLONCOLON nested_name_specifier_opt class_name
+	| access_specifier VIRTUAL COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER9, 5, $1, $2, $3, $4, $5); }
 	| access_specifier VIRTUAL nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER10, 4, $1, $2, $3, $4); }
 	| access_specifier COLONCOLON nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER11, 4, $1, $2, $3, $4); }
 	| access_specifier nested_name_specifier_opt class_name { $$ = alcnary(BASE_SPECIFIER12, 3, $1, $2, $3); }
@@ -1017,7 +1017,7 @@ operator:
  *----------------------------------------------------------------------*/
 
 template_declaration:
-	EXPORT_opt TEMPLATE '<' template_parameter_list '>' declaration
+	EXPORT_opt TEMPLATE '<' template_parameter_list '>' declaration { $$ = alcnary(TEMPLATE_DECLARATION1, 5, $1, $2, $3, $4, $5); }
 	;
 
 template_parameter_list:
@@ -1035,8 +1035,8 @@ type_parameter:
 	| CLASS identifier '=' type_id { $$ = alcnary(TYPE_PARAMETER2, 4, $1, $2, $3, $4); }
 	| TYPENAME identifier { $$ = alcnary(TYPE_PARAMETER3, 2, $1, $2); }
 	| TYPENAME identifier '=' type_id { $$ = alcnary(TYPE_PARAMETER4, 4, $1, $2, $3, $4); }
-	| TEMPLATE '<' template_parameter_list '>' CLASS identifier
-	| TEMPLATE '<' template_parameter_list '>' CLASS identifier '=' template_name
+	| TEMPLATE '<' template_parameter_list '>' CLASS identifier { $$ = alcnary(TYPE_PARAMETER5, 5, $1, $2, $3, $4, $5); }
+| TEMPLATE '<' template_parameter_list '>' CLASS identifier '=' template_name { $$ = alcnary(TYPE_PARAMETER6, 7, $1, $2, $3, $4, $5, $6, $7); }
 	;
 
 template_id:
@@ -1079,7 +1079,7 @@ handler_seq:
 	;
 
 handler:
-	CATCH '(' exception_declaration ')' compound_statement
+	CATCH '(' exception_declaration ')' compound_statement { $$ = alcnary(HANDLER1, 5, $1, $2, $3, $4, $5); }
 	;
 
 exception_declaration:
