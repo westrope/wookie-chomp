@@ -5,7 +5,7 @@ CFLAGS= -c -g
 
 all: 120++
 
-120++: 120lex.o main.o 120gram.o tree.o
+120++: 120lex.o main.o 120gram.o tree.o list.o
 	$(CC) -o 120++  main.o 120lex.o 120gram.o tree.o -ll
 
 120gram.c 120gram.h: 120gram.y
@@ -25,6 +25,9 @@ main.o: main.c 120gram.h
 
 tree.o: tree.c
 	$(CC) $(CFLAGS) tree.c
+
+list.o: list.c
+	$(CC) $(CFLAGS) list.c
 
 clean:
 	rm -f 120 *.o
