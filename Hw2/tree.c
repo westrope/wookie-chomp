@@ -48,25 +48,17 @@ struct node * alcnary(int symbol, int nkids, ...)
 
 void treeprint(struct node *np)
 {
-/* printf("treeprint %p\n", np); */
    /*
  *     * avoid segfault if something horrible went wrong.
  *         */
    if (np == NULL) { warn("NULL tree pointer"); return; }
-
-   if (np->symbol < 1000) {
-      printf("%s", np->u.t.lexeme);  
-			fflush(stdout);
-      }
-   else {
-      int i;
-      for (i=0; np->u.nt.child[i] != NULL; i++ ) {
-      	treeprint(np->u.nt.child[i]);
-       	if( np->symbol == 5001 || np->symbol == 4001
-	    || np->symbol == 4002) {
-	  
-	  printf("\n");
-	}
-      }
-   }
+   printf("%d\n", np->symbol);
+   if( np->symbol >= 1000)
+     {
+       int i;
+       for( i = 0; np->u.nt.child[i] != NULL; i++)
+	 {
+	   treeprint(np->u.nt.child[i]);
+	 }
+     }
 }

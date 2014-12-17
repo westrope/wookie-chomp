@@ -388,7 +388,8 @@ stringtext				([^"])|(\\.)
 "L\""{stringtext}*"\""			{ yylval.np = alcleaf(STRING, yytext); 
                                           return STRING; }
 
-.					{ fprintf(stderr, "%d: unexpected character `%c'\n", lineno, yytext[0]); }
+.					{ fprintf(stderr, "%d: unexpected character `%c'\n", lineno, yytext[0]); 
+                                          exit(1);}
 
 <<EOF>> {
      	  yypop_buffer_state();
