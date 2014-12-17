@@ -3,6 +3,9 @@
    Ian Westrope
    CS 445
 
+   found code for linked list from here:
+   http://c.learncodethehardway.org/book/ex32.html
+
 */
 
 
