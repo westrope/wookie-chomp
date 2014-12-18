@@ -47,4 +47,4 @@ List * create_list();
 // add to back
 void list_push(List * list, int btype, int scope, char *lexeme);
 int search(List * list, int btype, char *lexeme);
-
+void print(List * list);

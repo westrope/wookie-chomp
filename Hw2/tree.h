@@ -5,7 +5,7 @@
 
 */
 
-struct node{
+typedef struct node{
   int symbol;
   union {
     struct leaf {
@@ -16,9 +16,9 @@ struct node{
       struct node *child[9];
     } nt;
   } u;
-};
+} node;
 
 struct node * treenode(int symbol);
 struct node * alcleaf( int symbol, char *lexeme);
 struct node * alcnary(int symbol, int nkids, ...);
-void treeprint(struct node *np);
+void treeprint(struct node *np, int j);

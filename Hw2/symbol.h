@@ -7,12 +7,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "list.h"
+#include "tree.h"
 
-typedef struct table {
-  int count;
-  List *beg;
-  List *end;
-} Table;
-
-Table * create_table();
-void table_push(Table * table);
+void pop_table(List * table, node *t, int scope);
+char * getsymbol( node *t);
+int gettype( node *t);

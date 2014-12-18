@@ -43,16 +43,33 @@ struct node * alcnary(int symbol, int nkids, ...)
 //      printf("set child %d to %p\n", rv->u.nt.child[i]);
       }
    va_end(mylist);
+
    return rv;
 }
 
-void treeprint(struct node *np)
+void treeprint(struct node *np, int j)
 {
    /*
  *     * avoid segfault if something horrible went wrong.
  *         */
+
+
    if (np == NULL) { warn("NULL tree pointer"); return; }
+   
+   int k;
+   for(k = 0; k < j; k++) printf("\t");
    printf("%d\n", np->symbol);
+   
+   if(np->symbol >= 1000){
+     int i;
+     for(i = 0; np->u.nt.child[i] != NULL; i++){
+       treeprint(np->u.nt.child[i], j+1);
+     }
+   }
+      /*
+   printf("%d\n", np->symbol);
+   //  if(np->u.t.lexeme != '\0'){ printf("%s\n", np->u.t.lexeme);}
+   //  else {printf("\n");}
    if( np->symbol >= 1000)
      {
        int i;
@@ -60,5 +77,7 @@ void treeprint(struct node *np)
 	 {
 	   treeprint(np->u.nt.child[i]);
 	 }
-     }
+     
+    }
+   */
 }

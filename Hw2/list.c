@@ -6,6 +6,7 @@
 */
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "list.h"
 
 // set list count = to 0 after call of this
@@ -24,7 +25,8 @@ void list_push(List * list, int btype, int scope, char *lexeme){
 
   node->base_type = btype;
   node->scope = scope;
-  node->lexeme = lexeme;
+  
+  node->lexeme = strdup(lexeme);
 
   if(list->last == NULL){
     list->first = node;
@@ -54,4 +56,18 @@ int search(List *list, int btype, char *lexeme){
     }
   }
   return 0;
+}
+
+void print(List * list){
+  if(list->first == NULL){
+    printf("NULL list\n");
+    exit(3);
+  }
+  lnode *node = calloc(1,sizeof(lnode));
+  node = list->first;
+  while(node != NULL){
+    printf("Base type: %d, lexeme %s\n", node->base_type, node->lexeme);
+    node = node->next;
+  }
+  
 }

@@ -366,7 +366,7 @@ stringtext				([^"])|(\\.)
 [a-zA-Z_][a-zA-Z_0-9]*			{ yylval.np = alcleaf(IDENTIFIER, yytext); 
                                           return check_identifier(yytext); }
 
-"0"[xX][0-9a-fA-F]+{intsuffix}?		{ yylval.np = alcleaf(INTEGER, yytext); 
+"0"[xX][0-9a-fA-F]+{intsuffix}?		{ yylval.np = alcleaf(INTEGER, yytext);
                                           return INTEGER; }
 "0"[0-7]+{intsuffix}?			{ yylval.np = alcleaf(INTEGER, yytext); 
                                           return INTEGER; }
