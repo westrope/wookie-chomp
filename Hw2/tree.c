@@ -57,13 +57,15 @@ void treeprint(struct node *np, int j)
    if (np == NULL) { warn("NULL tree pointer"); return; }
    
    int k;
-   for(k = 0; k < j; k++) printf("\t");
+   for(k = 0; k < j; k++) printf("  ");
    printf("%d\n", np->symbol);
    
    if(np->symbol >= 1000){
      int i;
      for(i = 0; np->u.nt.child[i] != NULL; i++){
+       if(np->symbol != 16800){
        treeprint(np->u.nt.child[i], j+1);
+       }
      }
    }
       /*

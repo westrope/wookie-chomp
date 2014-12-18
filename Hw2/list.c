@@ -41,7 +41,7 @@ void list_push(List * list, int btype, int scope, char *lexeme){
 }
 
 // returns 1 for true 0 for false
-int search(List *list, int btype, char *lexeme){
+int search(List *list, int scope, char *lexeme){
   if(list == NULL){
     printf("List to search is null\n");
     exit(3);
@@ -49,7 +49,9 @@ int search(List *list, int btype, char *lexeme){
   lnode *node = calloc(1, sizeof(lnode));
   node = list->first;
   while(node != NULL){
-     if (strcmp(node->lexeme,lexeme) == 0){
+    printf("node scope %d, search scope %d\n", node->scope, scope);
+    if ((strcmp(node->lexeme,lexeme) == 0) 
+	&& (node->scope == scope)){
         return 1;
     } else {
       node = node->next;

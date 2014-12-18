@@ -478,7 +478,7 @@ elaborated_type_specifier:
 
 init_declarator_list:
 	init_declarator { $$ = alcnary(INIT_DECLARATOR_LIST1, 1, $1); }
-	| init_declarator_list ',' init_declarator { $$ = alcnary(INIT_DECLARATOR_LIST2, 3, $1, $2, $3); }
+	| init_declarator_list ',' init_declarator { $$ = alcnary(INIT_DECLARATOR_LIST2, 2, $1, $3); }
 	;
 
 init_declarator:
@@ -665,7 +665,7 @@ mem_initializer_id:
  *----------------------------------------------------------------------*/
 
 declaration_seq_opt:
-	/* epsilon */ { $$ = NULL; }
+	/* epsilon */ { $$ = alcnary(DECLARATION_SEQ_OPT1, 0); }
 	| declaration_seq { $$ = alcnary(DECLARATION_SEQ_OPT2, 1, $1); }
 	;
 
@@ -726,7 +726,7 @@ type_specifier_seq_opt:
 	;
 
 ctor_initializer_opt:
-	/* epsilon */ { $$ = NULL; }
+	/* epsilon */ { $$ = alcnary(CTOR_INITIALIZER_OPT1, 0); }
 	| ctor_initializer { $$ = alcnary(CTOR_INITIALIZER_OPT2, 1, $1); }
 	;
 

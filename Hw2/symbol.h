@@ -10,5 +10,5 @@
 #include "tree.h"
 
 void pop_table(List * table, node *t, int scope);
-char * getsymbol( node *t);
+char * getsymbol( node *t, int type, int scope, List * table);
 int gettype( node *t);
