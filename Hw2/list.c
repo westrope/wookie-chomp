@@ -49,8 +49,8 @@ int search(List *list, int btype, char *lexeme){
   lnode *node = calloc(1, sizeof(lnode));
   node = list->first;
   while(node != NULL){
-    if ( (node->base_type == btype) && (node->lexeme=lexeme)){
-      return 1;
+     if (strcmp(node->lexeme,lexeme) == 0){
+        return 1;
     } else {
       node = node->next;
     }

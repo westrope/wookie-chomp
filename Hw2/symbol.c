@@ -22,14 +22,22 @@ void pop_table(List * table, node *t, int scope){
   }
 
   //to do
-  // init_declarator is ident = literal
-  // simple_declaration is decl_specifier_seq init_declarator_list
+  // int x; done
+  // float x; done
+  // char x; done
+  // int x = 1;
+  // class x {}; needs new scope
   switch(t->symbol){
   case SIMPLE_DECLARATION1:{
     int type;
     char *lexeme;
     type = gettype(t->u.nt.child[0]);
     lexeme = getsymbol(t->u.nt.child[1]);
+    int z = search(table, type, lexeme);
+     if(z == 1){
+	printf("semantic error\n");
+	exit(3);
+      }
     list_push(table, type, scope, lexeme);
     // put stuff into table
     // increment scope if needed
@@ -74,11 +82,14 @@ int gettype( node *t){
   }
   switch(t->symbol){
   case DECL_SPECIFIER_SEQ1:{
-    while(t->u.nt.child[0]->symbol != 320){ 
- 
+    while((t->u.nt.child[0]->symbol != 320) &&
+	  (t->u.nt.child[0]->symbol != 314) &&
+	  (t->u.nt.child[0]->symbol != 298)){ 
      t = t->u.nt.child[0];
     }
     if(t->u.nt.child[0]->symbol == INT) return 1;
+    if(t->u.nt.child[0]->symbol == FLOAT) return 2;
+    if(t->u.nt.child[0]->symbol == CHAR) return 3;
     else return 0;
   }
   }
