@@ -21,6 +21,8 @@ void type_check(List * table, node *t, int scope){
   }
 
   switch(t->symbol){
+  case EQUALITY_EXPRESSION2:
+  case ASSIGNMENT_EXPRESSION2:
   case MULTIPLICATIVE_EXPRESSION2:
   case MULTIPLICATIVE_EXPRESSION3:
   case ADDITIVE_EXPRESSION3:
@@ -37,10 +39,21 @@ void type_check(List * table, node *t, int scope){
     scope++;
     break;
   }
-  case PRIMARY_EXPRESSION3:
-    {
-      
+  case AND_EXPRESSION2:    
+  case EXCLUSIVE_OR_EXPRESSION2:
+  case INCLUSIVE_OR_EXPRESSION2:
+  case LOGICAL_AND_EXPRESSION2:
+  case LOGICAL_OR_EXPRESSION2:{
+    int y = express_bool(t->u.nt.child[0], t->u.nt.child[1], table, scope);
+    if( y == 0 ){
+      printf("semantic error\n");
+      exit(3);
     }
+    break;
+  }
+
+
+
   default:{
     break;
   }
@@ -51,6 +64,21 @@ void type_check(List * table, node *t, int scope){
       type_check(table, t->u.nt.child[i], scope);
     }
   }
+}
+
+int express_bool(node *t1, node *t2, List * table, int scope){
+  char *lex1;
+  char *lex2;
+  node *node1 = calloc(1, sizeof(lnode));
+  node *node2 = calloc(1, sizeof(lnode));
+  while( t1 != NULL && t1->symbol != 258)t1 = t1->u.nt.child[0];
+  while( t2 != NULL && t2->symbol != 258)t2 = t2->u.nt.child[0];
+  lex1 = strdup(t1->u.t.lexeme);
+  lex2 = strdup(t2->u.t.lexeme);
+  int x;
+  x = bool_search(table, scope, lex1, lex2);
+  if( x != 1) return 0;
+  else return 1;
 }
 
 int express_type(node *t1, node *t2, List * table, int scope){

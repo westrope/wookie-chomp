@@ -286,33 +286,33 @@ relational_expression:
 
 equality_expression:
 	relational_expression { $$ = alcnary(EQUALITY_EXPRESSION1, 1, $1); }
-	| equality_expression EQ relational_expression { $$ = alcnary(EQUALITY_EXPRESSION2, 3, $1, $2, $3); }
+| equality_expression EQ relational_expression { $$ = alcnary(EQUALITY_EXPRESSION2, 2, $1, $3); }
 	| equality_expression NOTEQ relational_expression { $$ = alcnary(EQUALITY_EXPRESSION3, 3, $1, $2, $3); }
 	;
 
 and_expression:
 	equality_expression { $$ = alcnary(AND_EXPRESSION1, 1, $1); }
-	| and_expression '&' equality_expression { $$ = alcnary(AND_EXPRESSION2, 3, $1, $2, $3); }
+	| and_expression '&' equality_expression { $$ = alcnary(AND_EXPRESSION2, 2, $1, $3); }
 	;
 
 exclusive_or_expression:
 	and_expression { $$ = alcnary(EXCLUSIVE_OR_EXPRESSION1, 1, $1); }
-	| exclusive_or_expression '^' and_expression { $$ = alcnary(EXCLUSIVE_OR_EXPRESSION2, 3, $1, $2, $3); }
+	| exclusive_or_expression '^' and_expression { $$ = alcnary(EXCLUSIVE_OR_EXPRESSION2, 2, $1, $3); }
 	;
 
 inclusive_or_expression:
 	exclusive_or_expression { $$ = alcnary(INCLUSIVE_OR_EXPRESSION1, 1, $1); }
-	| inclusive_or_expression '|' exclusive_or_expression { $$ = alcnary(INCLUSIVE_OR_EXPRESSION2, 3, $1, $2, $3); }
+	| inclusive_or_expression '|' exclusive_or_expression { $$ = alcnary(INCLUSIVE_OR_EXPRESSION2, 2, $1, $3); }
 	;
 
 logical_and_expression:
 	inclusive_or_expression { $$ = alcnary(LOGICAL_AND_EXPRESSION1, 1, $1); }
-	| logical_and_expression ANDAND inclusive_or_expression { $$ = alcnary(LOGICAL_AND_EXPRESSION2, 3, $1, $2, $3); }
+	| logical_and_expression ANDAND inclusive_or_expression { $$ = alcnary(LOGICAL_AND_EXPRESSION2, 2, $1, $3); }
 	;
 
 logical_or_expression:
 	logical_and_expression { $$ = alcnary(LOGICAL_OR_EXPRESSION1, 1, $1); }
-	| logical_or_expression OROR logical_and_expression { $$ = alcnary(LOGICAL_OR_EXPRESSION2, 3, $1, $2, $3); }
+	| logical_or_expression OROR logical_and_expression { $$ = alcnary(LOGICAL_OR_EXPRESSION2, 2, $1, $3); }
 	;
 
 conditional_expression:
@@ -322,7 +322,7 @@ conditional_expression:
 
 assignment_expression:
 	conditional_expression { $$ = alcnary(ASSIGNMENT_EXPRESSION1, 1, $1); }
-	| logical_or_expression assignment_operator assignment_expression { $$ = alcnary(ASSIGNMENT_EXPRESSION2, 3, $1, $2, $3); }
+	| logical_or_expression assignment_operator assignment_expression { $$ = alcnary(ASSIGNMENT_EXPRESSION2, 2, $1, $3); }
 	;
 
 assignment_operator:

@@ -49,3 +49,4 @@ void list_push(List * list, int btype, int scope, char *lexeme);
 int search(List * list, int btype, char *lexeme);
 void print(List * list);
 int type_search(List *list, int scope, char *lex1, char* lex2);
+int bool_search(List *list, int scope, char *lex1, char* lex2);

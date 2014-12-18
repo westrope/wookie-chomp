@@ -59,6 +59,32 @@ int search(List *list, int scope, char *lexeme){
   return 0;
 }
 
+int bool_search(List *list, int scope, char *lex1, char *lex2){
+  int type1;
+  int type2;
+  lnode *node1 = calloc(1, sizeof(lnode));
+  lnode *node2 = calloc(1, sizeof(lnode));
+  node1 = list->first;
+  while( node1 != NULL && (node1->scope != scope)){
+    node1 = node1->next;
+  }
+
+  node2 = node1;
+  while( node2 != NULL){
+     if(strcmp(node2->lexeme,lex2) == 0)break;
+    node2 = node2->next;
+  }
+  while( node1 != NULL){
+    if(strcmp(node1->lexeme,lex1) == 0)break;
+    node1 = node1->next;
+  }
+  if(node1->base_type != 4 && 
+     node1->base_type != 5 &&
+     node2->base_type != 4 &&
+     node2->base_type != 5) return 1;
+  else return 0;
+}
+
 int type_search(List *list, int scope, char *lex1, char *lex2){
   int type1;
   int type2;
