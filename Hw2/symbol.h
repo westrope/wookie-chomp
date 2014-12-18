@@ -12,3 +12,5 @@
 void pop_table(List * table, node *t, int scope);
 char * getsymbol( node *t, int type, int scope, List * table);
 int gettype( node *t);
+void type_check(List * table, node *t, int scope);
+int express_type(node *t1, node *t2, List *table, int scope);

@@ -149,6 +149,7 @@ program:
         declaration_seq_opt {yyroot = $1; printf("assigning root \n"); treeprint(yyroot, 0);
 	  table = create_list();
 	  pop_table(table, yyroot, scope);
+	  type_check(table, yyroot, scope);
 	  print(table);}
         ;
 
@@ -265,8 +266,8 @@ multiplicative_expression:
 
 additive_expression:
 	multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION1, 1, $1); }
-	| additive_expression '+' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION2, 3, $1, $2, $3); }
-	| additive_expression '-' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION3, 3, $1, $2, $3); }
+	| additive_expression '+' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION2, 2, $1, $3); }
+	| additive_expression '-' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION3, 1, $1, $3); }
 	;
 
 shift_expression:
