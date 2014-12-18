@@ -15,6 +15,7 @@
 
 extern int namespace;
 extern int iostream;
+int ptr;
 
 void insert_iostream(List * table){
   if( namespace == 1 && iostream == 1){
@@ -124,6 +125,7 @@ int express_type(node *t1, node *t2, List * table, int scope){
 
 
 void pop_table(List * table, node *t, int scope){
+  ptr = 0;
   if(t == NULL || t->symbol == NULL){
     printf("tree is null\n");
     exit(3);
@@ -143,6 +145,10 @@ void pop_table(List * table, node *t, int scope){
     char *lexeme;
     type = gettype(t->u.nt.child[0]);
     lexeme = getsymbol(t->u.nt.child[1], type, scope, table);
+    if(ptr == 1){
+      type = 6;
+      ptr = 0;
+    }
     if(lexeme == NULL) break;
     int z = search(table, scope, lexeme);
      if(z == 1){
@@ -193,8 +199,11 @@ char * getsymbol(node *t, int type, int scope, List * table){
   case DECLARATOR1:
   case INIT_DECLARATOR_LIST1:{
     while(t->u.nt.child[0]->symbol != 258){
- 
-      t = t->u.nt.child[0];
+       if(t->u.nt.child[0]->symbol == 9900){
+	t = t->u.nt.child[1];
+	ptr = 1;
+	continue;
+      }else t = t->u.nt.child[0];
     }
     if(t->u.nt.child[0] != NULL){
       t = t->u.nt.child[0];
@@ -206,8 +215,6 @@ char * getsymbol(node *t, int type, int scope, List * table){
      lexeme = strdup(t->u.t.lexeme);
      return lexeme;
   }
-
-
   case INIT_DECLARATOR_LIST2:{
     node *tmp = calloc(1, sizeof(node));
     tmp = t;
