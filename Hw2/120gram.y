@@ -161,7 +161,7 @@ program:
 
 primary_expression:
 	literal { $$ = alcnary(PRIMARY_EXPRESSION1, 1, $1); }
-        | '(' expression ')' { $$ = alcnary(PRIMARY_EXPRESSION3, 3, $1, $2, $3); }
+| '(' expression ')' { $$ = alcnary(PRIMARY_EXPRESSION3, 1, $2); }
 	| id_expression { $$ = alcnary(PRIMARY_EXPRESSION2, 1, $1); }
 	;
 
@@ -259,15 +259,15 @@ pm_expression:
 
 multiplicative_expression:
         pm_expression  { $$ = alcnary(MULTIPLICATIVE_EXPRESSION1, 1, $1); }
-	| multiplicative_expression '*' pm_expression { $$ = alcnary(MULTIPLICATIVE_EXPRESSION2, 3, $1, $2, $3); }
-	| multiplicative_expression '/' pm_expression { $$ = alcnary(MULTIPLICATIVE_EXPRESSION3, 3, $1, $2, $3); }
+	| multiplicative_expression '*' pm_expression { $$ = alcnary(MULTIPLICATIVE_EXPRESSION2, 2, $1, $3); }
+	| multiplicative_expression '/' pm_expression { $$ = alcnary(MULTIPLICATIVE_EXPRESSION3, 2, $1, $3); }
 	| multiplicative_expression '%' pm_expression { $$ = alcnary(MULTIPLICATIVE_EXPRESSION4, 3, $1, $2, $3); }
 	;
 
 additive_expression:
 	multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION1, 1, $1); }
 	| additive_expression '+' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION2, 2, $1, $3); }
-	| additive_expression '-' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION3, 1, $1, $3); }
+	| additive_expression '-' multiplicative_expression { $$ = alcnary(ADDITIVE_EXPRESSION3, 2, $1, $3); }
 	;
 
 shift_expression:

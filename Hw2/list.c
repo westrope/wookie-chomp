@@ -49,7 +49,6 @@ int search(List *list, int scope, char *lexeme){
   lnode *node = calloc(1, sizeof(lnode));
   node = list->first;
   while(node != NULL){
-    printf("node scope %d, search scope %d\n", node->scope, scope);
     if ((strcmp(node->lexeme,lexeme) == 0) 
 	&& (node->scope == scope)){
         return 1;

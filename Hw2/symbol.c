@@ -21,6 +21,9 @@ void type_check(List * table, node *t, int scope){
   }
 
   switch(t->symbol){
+  case MULTIPLICATIVE_EXPRESSION2:
+  case MULTIPLICATIVE_EXPRESSION3:
+  case ADDITIVE_EXPRESSION3:
   case ADDITIVE_EXPRESSION2:{
     int y;
     y = express_type(t->u.nt.child[0], t->u.nt.child[1], table, scope);
@@ -34,7 +37,10 @@ void type_check(List * table, node *t, int scope){
     scope++;
     break;
   }
-    
+  case PRIMARY_EXPRESSION3:
+    {
+      
+    }
   default:{
     break;
   }
@@ -187,6 +193,7 @@ int gettype( node *t){
     while((t->u.nt.child[0]->symbol != 320) &&
 	  (t->u.nt.child[0]->symbol != 299) &&
 	  (t->u.nt.child[0]->symbol != 314) &&
+	  (t->u.nt.child[0]->symbol != 351) &&
 	  (t->u.nt.child[0]->symbol != 298)){ 
      t = t->u.nt.child[0];
     }
@@ -194,6 +201,7 @@ int gettype( node *t){
     if(t->u.nt.child[0]->symbol == FLOAT) return 2;
     if(t->u.nt.child[0]->symbol == CHAR) return 3;
     if(t->u.nt.child[0]->symbol == CLASS) return 4;
+    if(t->u.nt.child[0]->symbol == VOID) return 5;
     else return 0;
   }
   }
