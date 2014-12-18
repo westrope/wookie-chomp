@@ -13,6 +13,31 @@
 #include "prodrules.h"
 #include "120gram.h"
 
+extern int namespace;
+extern int iostream;
+
+void insert_iostream(List * table){
+  if( namespace == 1 && iostream == 1){
+    int type = 4;
+    int scope = 0;
+    char *lexeme = calloc(1, sizeof("string"));
+    lexeme = "string";
+    int z = search(table, scope, lexeme);
+    if(z == 1){
+      printf("semantic error\n");
+      exit(3);
+    }
+    list_push(table, type, scope, lexeme);
+    char *lexeme2 = calloc(1, sizeof("fstream"));    
+    lexeme2 = "fstream";
+    z = search(table, scope, lexeme2);
+    if(z == 1){
+      printf("semantic error\n");
+      exit(3);
+    }
+    list_push(table, type, scope, lexeme2);			  
+}
+}
 
 void type_check(List * table, node *t, int scope){
   if(t == NULL || t->symbol == NULL){
@@ -198,10 +223,20 @@ char * getsymbol(node *t, int type, int scope, List * table){
       if(tmp->u.nt.child[0] == NULL) break;
       lexeme = getsymbol(tmp->u.nt.child[0], type, scope, table);
       printf("lex %s, type %d\n", lexeme, type);
+      int z = search(table, scope, lexeme);
+      if(z == 1){
+        printf("semantic error\n");
+        exit(3);
+      }
       list_push(table, type, scope, lexeme);
       if(tmp->u.nt.child[1] == NULL) break;
       lexeme = getsymbol(tmp->u.nt.child[1], type, scope, table);
       printf("lex %s, type %d\n", lexeme, type);
+      z = search(table, scope, lexeme);
+      if(z == 1){
+        printf("semantic error\n");
+        exit(3);
+      }
       list_push(table, type, scope, lexeme); 
     }
     return NULL;

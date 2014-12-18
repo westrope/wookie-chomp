@@ -56,6 +56,9 @@ static int yywrap(void);
 static void skip_until_eol(void);
 static void skip_comment(void);
 static int check_identifier(char *);
+
+extern int iostream;
+extern int namespace;
 %}
 
 /* headerfile to use yypush_buffer in main.c */
@@ -81,7 +84,7 @@ stringtext				([^"])|(\\.)
 
 "#include"    { BEGIN (include); }
 <include>[ /t]*
-<include>"<iostream>"  { printf("found iostream\n"); 
+<include>"<iostream>"  { iostream = 1; 
                          BEGIN (INITIAL); }
 <include>"<cstdlib>"   { printf("found cstdlib\n");
                          BEGIN (INITIAL); }
@@ -362,6 +365,7 @@ stringtext				([^"])|(\\.)
                                           return WCHAR_T; }
 "while"					{ yylval.np = alcleaf(WHILE, yytext); 
                                           return WHILE; }
+"using namespace std;"                  { namespace = 1; }
 
 [a-zA-Z_][a-zA-Z_0-9]*			{ yylval.np = alcleaf(IDENTIFIER, yytext); 
                                           return check_identifier(yytext); }

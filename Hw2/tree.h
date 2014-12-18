@@ -5,6 +5,9 @@
 
 */
 
+int iostream;
+int namespace;
+
 typedef struct node{
   int symbol;
   union {

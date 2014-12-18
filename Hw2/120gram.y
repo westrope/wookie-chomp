@@ -150,6 +150,7 @@ program:
 	  table = create_list();
 	  pop_table(table, yyroot, scope);
 	  type_check(table, yyroot, scope);
+	  insert_iostream(table);
 	  print(table);}
         ;
 
