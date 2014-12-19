@@ -25,7 +25,7 @@ void insert_iostream(List * table){
     lexeme = "string";
     int z = search(table, scope, lexeme);
     if(z == 1){
-      printf("semantic error\n");
+      printf("semantic error, %s has already been declared\n", lexeme);
       exit(3);
     }
     list_push(table, type, scope, lexeme);
@@ -33,7 +33,7 @@ void insert_iostream(List * table){
     lexeme2 = "fstream";
     z = search(table, scope, lexeme2);
     if(z == 1){
-      printf("semantic error\n");
+      printf("semantic error, %s has already been declared\n", lexeme);
       exit(3);
     }
     list_push(table, type, scope, lexeme2);			  
@@ -56,7 +56,7 @@ void type_check(List * table, node *t, int scope){
     int y;
     y = express_type(t->u.nt.child[0], t->u.nt.child[1], table, scope);
     if( y == 0){
-      printf("semantic error\n");
+      printf("semantic error, incorrect types in %d expression\n", t->symbol);
       exit(3);
     }
     break;
@@ -72,7 +72,7 @@ void type_check(List * table, node *t, int scope){
   case LOGICAL_OR_EXPRESSION2:{
     int y = express_bool(t->u.nt.child[0], t->u.nt.child[1], table, scope);
     if( y == 0 ){
-      printf("semantic error\n");
+      printf("semantic error, incorrect types in %d expression\n", t->symbol);
       exit(3);
     }
     break;
@@ -152,7 +152,7 @@ void pop_table(List * table, node *t, int scope){
     if(lexeme == NULL) break;
     int z = search(table, scope, lexeme);
      if(z == 1){
-	printf("semantic error\n");
+       printf("semantic error, %s has already been declared\n", lexeme);
 	exit(3);
       }
     list_push(table, type, scope, lexeme);
@@ -167,7 +167,7 @@ void pop_table(List * table, node *t, int scope){
     lexeme = getsymbol(t->u.nt.child[1], type, scope, table);
     int z = search(table, scope, lexeme);
     if(z == 1){
-      printf("semantic error\n");
+      printf("semantic error, %s has already been declared\n", lexeme);
       exit(3);
     }
     list_push(table, type, scope, lexeme);
@@ -223,25 +223,22 @@ char * getsymbol(node *t, int type, int scope, List * table){
       tmp = tmp->u.nt.child[0];
       count++;
     }
-    printf("count %d\n", count);
-    int i;
+     int i;
     for(i = 0; i < count; i++){
       tmp = t->u.nt.child[i];
       if(tmp->u.nt.child[0] == NULL) break;
       lexeme = getsymbol(tmp->u.nt.child[0], type, scope, table);
-      printf("lex %s, type %d\n", lexeme, type);
-      int z = search(table, scope, lexeme);
+       int z = search(table, scope, lexeme);
       if(z == 1){
-        printf("semantic error\n");
+        printf("semantic error, %s has already been declared\n", lexeme);
         exit(3);
       }
       list_push(table, type, scope, lexeme);
       if(tmp->u.nt.child[1] == NULL) break;
       lexeme = getsymbol(tmp->u.nt.child[1], type, scope, table);
-      printf("lex %s, type %d\n", lexeme, type);
-      z = search(table, scope, lexeme);
+       z = search(table, scope, lexeme);
       if(z == 1){
-        printf("semantic error\n");
+        printf("semantic error, %s has already been declared\n", lexeme);
         exit(3);
       }
       list_push(table, type, scope, lexeme); 

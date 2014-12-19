@@ -146,7 +146,9 @@ boolean_literal:
 	;
 
 program:
-        declaration_seq_opt {yyroot = $1; printf("assigning root \n"); treeprint(yyroot, 0);
+declaration_seq_opt {yyroot = $1; 
+          //printf("assigning root \n"); 
+          //treeprint(yyroot, 0);
 	  table = create_list();
 	  pop_table(table, yyroot, scope);
 	  type_check(table, yyroot, scope);
